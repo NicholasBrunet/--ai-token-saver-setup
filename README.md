@@ -5,7 +5,7 @@ A reusable bootstrap repository for creating project-specific AI context and tok
 This repository is meant to be cloned directly into another repository as a nested local repo:
 
 ```bash
-git clone https://github.com/YOUR_NAME/--ai-token-saver-setup.git ./--ai-token-saver-setup
+git clone https://github.com/NicholasBrunet/--ai-token-saver-setup.git ./--ai-token-saver-setup
 ```
 
 Then ask your AI coding agent:
