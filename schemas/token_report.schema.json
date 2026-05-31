@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Token Saver Token Efficiency Report",
+  "type": "object",
+  "required": [
+    "task",
+    "baseline_tokens",
+    "optimized_tokens",
+    "estimated_saved_tokens",
+    "estimated_improvement_percent"
+  ],
+  "properties": {
+    "task": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "baseline_source": {
+      "type": "string"
+    },
+    "baseline_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "optimized_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "estimated_saved_tokens": {
+      "type": "integer"
+    },
+    "estimated_improvement_percent": {
+      "type": "number"
+    },
+    "used_broad_context": {
+      "type": "boolean"
+    },
+    "used_original_baseline": {
+      "type": "boolean"
+    },
+    "inspected_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "context_files_counted": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}
