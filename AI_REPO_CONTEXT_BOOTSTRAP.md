@@ -2,26 +2,27 @@
 
 ## 0. Purpose
 
-You are an AI coding agent operating inside a repository that contains a setup folder named:
+You are an AI coding agent operating inside a repository that contains:
 
 ```text
 --ai-token-saver-setup/
 ```
 
-Your task is to create a repository-specific AI context and token optimization runtime folder named:
+Your task is to create a repository-specific AI context and token optimization runtime:
 
 ```text
 --ai-token-saver/
 ```
 
-This is a one-time expensive initialization pass. Spend the tokens needed to understand the repository well enough to build durable project-specific tooling.
+This setup uses one expensive initialization pass to create durable project-specific tooling. Future tasks should avoid broad repository scanning by using generated routes, generated context, and permanent agent instructions.
 
-The generated runtime must let future AI agents work like this:
+The generated runtime system must support:
 
 ```text
 casual user prompt
 → project-aware technical task string
 → preflight token/context estimate
+→ stale context validation
 → route-based focused context generation
 → targeted file inspection
 → small complete edits
@@ -32,40 +33,14 @@ casual user prompt
 
 This file is an operating contract. Do not merely summarize it. Build the system.
 
----
+## 1. Non-Negotiable Output Contract
 
-## 1. The Big Idea
-
-Normal AI coding workflow often fails because the agent starts by broadly searching or reading the repository. That wastes tokens and causes weak, unrelated, or partial edits.
-
-This bootstrap inverts that workflow:
-
-1. Spend tokens once to understand the repo.
-2. Generate a project-specific brain and routing system.
-3. Generate scripts to create focused context for each future task.
-4. Generate permanent future-agent instructions.
-5. Measure whether the system saved tokens.
-6. Update memory when mistakes reveal reusable lessons.
-
-The generated system is not model fine-tuning. It is repo-specific operational memory and tooling.
-
----
-
-## 2. Non-Negotiable Output Contract
-
-You must create actual files. Do not stop at a plan.
-
-Create this folder:
-
-```text
---ai-token-saver/
-```
-
-Create these files/directories:
+Create:
 
 ```text
 --ai-token-saver/
   README.md
+  runtime_version.json
   project_brain.md
   project_systems.json
   context_routes.json
@@ -80,6 +55,8 @@ Create these files/directories:
     README.md
   context/
     README.md
+  backups/
+    README.md
   pyscripts/
     generate_ai_context.py
     report_token_efficiency.py
@@ -87,103 +64,57 @@ Create these files/directories:
     inspect_ai_routes.py
 ```
 
-If the repository already has a preferred scripts directory such as `pyscripts/`, `tools/`, or `scripts/`, you may also place shims or copies there. Still keep the generated runtime documented under:
+Do not create vague placeholder scripts. If a feature cannot be fully implemented, implement graceful fallback behavior and document the limitation.
+
+## 2. Required Setup Files To Read
+
+Before initialization, read:
 
 ```text
---ai-token-saver/generated_tools_manifest.json
-```
-
-Do not generate vague placeholder scripts. The scripts must be usable.
-
-If you cannot fully implement a feature because the repository environment is missing a dependency, implement graceful fallback behavior and document the limitation.
-
----
-
-## 3. Setup Folder Reading Contract
-
-Before initializing the runtime system, read:
-
-```text
---ai-token-saver-setup/AI_REPO_CONTEXT_BOOTSTRAP.md
 --ai-token-saver-setup/README.md
---ai-token-saver-setup/schemas/context_routes.schema.json
---ai-token-saver-setup/schemas/project_systems.schema.json
---ai-token-saver-setup/schemas/token_report.schema.json
---ai-token-saver-setup/schemas/generated_tools_manifest.schema.json
+--ai-token-saver-setup/VERSION
+--ai-token-saver-setup/CHANGELOG.md
+--ai-token-saver-setup/UPGRADE.md
+--ai-token-saver-setup/AI_REPO_CONTEXT_BOOTSTRAP.md
+--ai-token-saver-setup/schemas/
 --ai-token-saver-setup/examples/
 --ai-token-saver-setup/templates/
 --ai-token-saver-setup/docs/
 ```
 
-The setup folder is reusable source material. Do not modify it unless the user asks.
+Do not modify setup files unless the user explicitly asks.
 
-The generated `--ai-token-saver/` folder is repository-specific and may be modified over time.
+## 3. Parent Ignore Contract
 
----
-
-## 4. Parent Repository Ignore Contract
-
-The parent repository should not commit these folders by default:
+The parent repository should ignore:
 
 ```gitignore
 --ai-token-saver-setup/
 --ai-token-saver/
 ```
 
-If the parent `.gitignore` does not include them, either:
+## 4. Initialization Discovery Requirements
 
-1. Tell the user to run the install helper, or
-2. Add the ignore rules if the task allows editing `.gitignore`.
-
-Helper scripts are in:
-
-```text
---ai-token-saver-setup/scripts/install-parent-ignore.sh
---ai-token-saver-setup/scripts/install-parent-ignore.ps1
-```
-
----
-
-## 5. Initialization Pass Requirements
-
-During initialization, do a broad but intelligent scan.
-
-You must discover and document:
-
-### Repository Basics
+Discover and document:
 
 - repository name
-- primary languages
+- languages
 - frameworks
-- package/build systems
+- package/build tools
 - test frameworks
 - executable scripts
 - source roots
 - resource roots
-- docs roots
 - config files
 - CI files
 - runtime/generated folders
 - binary/dependency folders
+- major systems/domains
+- architecture patterns
+- validation commands
+- known pitfalls
 
-### Major Systems
-
-A "system" is a coherent feature area or architecture slice.
-
-Examples:
-
-- profile persistence
-- generator placement
-- auth flow
-- inventory service
-- invoice generation
-- CSV analytics
-- frontend settings page
-- API client
-- database migrations
-- plugin bridge layer
-
-For each system, record:
+For each major system, record:
 
 - system name
 - purpose
@@ -197,7 +128,6 @@ For each system, record:
 - validation commands
 - related systems
 - notes
-- known risks
 
 Write this to:
 
@@ -206,15 +136,9 @@ Write this to:
 --ai-token-saver/project_brain.md
 ```
 
-`project_systems.json` must follow:
+## 5. Architecture Pattern Discovery
 
-```text
---ai-token-saver-setup/schemas/project_systems.schema.json
-```
-
-### Architecture Patterns
-
-Identify reusable patterns, not just files.
+Do not only list files. Infer reusable patterns.
 
 Examples:
 
@@ -225,117 +149,52 @@ component → hook/store → API client → backend route
 CLI command → parser → processor → output writer
 ```
 
-Record these in:
+Write these to:
 
 ```text
 --ai-token-saver/known_patterns.md
 ```
 
-### Pitfalls
-
-Identify known or likely failure modes:
-
-- generated folders that must not be scanned
-- classloader/load-order issues
-- migrations requiring multiple database flavors
-- public API signatures that must stay stable
-- null-safety requirements for scripting bridges
-- rebuild/copy/restart requirements
-- validation commands that must be run
-- common stale-output traps
-- files that look current but are generated
-
-Record these in:
-
-```text
---ai-token-saver/known_pitfalls.md
-```
-
----
-
 ## 6. Project-Aware Prompt Conversion
 
-Future users should not need to speak in script-optimized language.
+Future users should not need script-optimized prompts.
 
-Generated future-agent instructions must tell agents:
-
-- Accept casual prompts.
-- Convert them internally into technical task strings.
-- Use generated routes to refine scope.
-- Do not ask the user to rewrite their prompt unless truly ambiguous.
+Generated agent instructions must tell agents to convert casual prompts into technical task strings.
 
 Examples:
 
 ```text
 User: I want generators to save like profiles.
 Task: generator database persistence model dao sql migration api script bridge profile-like storage
-```
 
-```text
-User: fix the invoice output formatting
-Task: invoice generation output formatting template row insertion spreadsheet export
-```
+User: migrate Claims from CSV like profiles/generators.
+Task: claim database persistence migrate csv model dao api migration script bridge profile generator pattern
 
-```text
-User: review what changed
+User: review what changed.
 Task: review current edits changed files validation regression risk
 ```
 
 ### "Like X" Rule
 
-When the user says "like X", treat X as an existing repository pattern to inspect and reuse.
+When the user says "like X", treat X as an existing project pattern to inspect and reuse.
 
-Examples:
-
-```text
-"like profiles"
-→ inspect profile model, DAO, migrations, API, script bridge, commands/events, and copy the architectural pattern.
-
-"save like orders"
-→ inspect order persistence and adapt it.
-
-"make this work like auth"
-→ inspect auth entrypoints, middleware, data model, and tests.
-```
-
-This rule is critical.
-
-Do not treat "like X" as vague wording when the repository can reveal what X means.
-
----
+Do not treat "like profiles" or "save like X" as vague wording if repository context can reveal what X means.
 
 ## 7. Foundation Pass Rule
 
-For broad architecture migrations, prefer a foundation pass unless the user explicitly requests a complete rewrite.
+For broad architecture migrations, prefer a foundation pass unless the user explicitly asks for a full rewrite.
 
-A foundation pass means:
-
-- create the core model/data shape
-- create persistence layer
-- add API boundary
-- add initial integration points
-- preserve compatibility where possible
-- avoid rewriting every feature at once
-- document follow-up work
-
-Example:
+A foundation pass should create or update:
 
 ```text
-User: I want generators to save like profiles.
+model/data shape
+→ persistence layer
+→ migration/schema
+→ public API boundary
+→ minimal integration layer
+→ validation
+→ follow-up notes
 ```
-
-A good first pass may add:
-
-- generator database model
-- DAO/repository
-- migrations
-- API bridge methods
-- minimal script calls
-- fallback compatibility
-
-It should not necessarily rewrite every admin/debug/UI flow unless required.
-
----
 
 ## 8. Context Routes
 
@@ -345,57 +204,38 @@ Generate:
 --ai-token-saver/context_routes.json
 ```
 
-It must follow:
-
-```text
---ai-token-saver-setup/schemas/context_routes.schema.json
-```
+Routes must be project-specific and follow the context routes schema.
 
 Each route should include:
 
-- `route_name`
-- `description`
-- `match_terms`
-- `negative_match_terms`
-- `task_terms`
-- `recommended_scope`
-- `include_paths`
-- `avoid_paths`
-- `related_systems`
-- `validation_commands`
-- `known_pitfalls`
-- `confidence`
+- route name
+- description
+- match terms
+- negative match terms
+- expanded task terms
+- recommended scope/profile
+- include paths
+- avoid paths
+- related systems
+- validation commands
+- known pitfalls
+- confidence
 
-Routes must be project-specific.
-
-Avoid generic routes if more precise routes exist.
-
-Bad routes:
-
-```text
-backend
-frontend
-database
-scripts
-```
-
-Better routes:
+Good examples:
 
 ```text
 profile_database_persistence
 generator_database_persistence
+claim_database_persistence
 skript_java_bridge
 invoice_template_generation
 csv_category_analytics
 maven_dependency_bootstrap
-minecraft_region_worker_transfer
 ```
 
-Routes should be used by `generate_ai_context.py`.
+Avoid vague routes like `backend`, `frontend`, or `database` when more specific routes are possible.
 
----
-
-## 9. Required Context Generator Script
+## 9. Required Context Generator
 
 Create:
 
@@ -403,9 +243,7 @@ Create:
 --ai-token-saver/pyscripts/generate_ai_context.py
 ```
 
-This script is the per-task context planner/generator.
-
-It must support at least:
+It must support:
 
 ```bash
 python --ai-token-saver/pyscripts/generate_ai_context.py --task "<task>"
@@ -414,46 +252,30 @@ python --ai-token-saver/pyscripts/generate_ai_context.py --profile changed --tas
 python --ai-token-saver/pyscripts/generate_ai_context.py --include path --exclude path --task "<task>"
 ```
 
-You may adapt flag names, but generated agent instructions must show the exact commands.
-
-### Context Generator Responsibilities
-
-The script must:
+It must:
 
 1. Load `--ai-token-saver/context_routes.json`.
-2. Convert or accept a technical task string.
-3. Match routes.
-4. Identify candidate files.
-5. Exclude runtime/generated/binary/dependency folders.
-6. Estimate token costs.
-7. Generate map/context/manifest files.
-8. Recommend narrower routes when broad context is expensive.
-9. Snapshot original preflight baseline.
-10. Preserve enough metadata for token efficiency reporting.
+2. Match routes to the task.
+3. Identify candidate files.
+4. Exclude runtime/generated/binary/dependency folders.
+5. Estimate token costs.
+6. Generate map/context/manifest files.
+7. Recommend narrower routes if broad context is expensive.
+8. Snapshot original preflight baseline.
+9. Include current task and task hash in map/manifest.
+10. Detect stale context files.
+11. Preserve metadata for token efficiency reporting.
 
-### Required Generated Context Files
-
-The script should write:
+Required outputs:
 
 ```text
 --ai-token-saver/context/map.md
 --ai-token-saver/context/task_context.md
---ai-token-saver/context/context.md       # only when safe or explicitly forced
+--ai-token-saver/context/context.md       # only when safe or forced
 --ai-token-saver/context/manifest.md
 ```
 
-If the repository uses `.codex/`, optionally mirror:
-
-```text
-.codex/map.md
-.codex/task_context.md
-.codex/context.md
-.codex/manifest.md
-```
-
-### Required Preflight Baseline Files
-
-On `--preflight`, write:
+Preflight outputs:
 
 ```text
 --ai-token-saver/sessions/latest_baseline.json
@@ -461,101 +283,35 @@ On `--preflight`, write:
 --ai-token-saver/sessions/preflight_manifest.md
 ```
 
-If the repository uses `.codex/`, also mirror:
+## 10. Stale Context Protection
+
+Mandatory.
+
+Every generated map and manifest must include:
 
 ```text
-.codex/session_baseline.json
-.codex/preflight_map.md
-.codex/preflight_manifest.md
+task
+task_hash
+created_at
+selected_routes
+baseline_path
 ```
 
-### Baseline Rule
+Before trusting existing context, future agents must verify:
 
-The original preflight baseline must not be replaced by a later `--profile changed` refresh.
+1. the task matches the current task, or
+2. the task hash matches the current task hash.
 
-Token reporting must compare against the original baseline.
-
-### Risk Levels
-
-Use approximate risk levels:
+If map/manifest is stale:
 
 ```text
-safe       <= 25,000 tokens
-moderate   <= 60,000 tokens
-expensive  <= 100,000 tokens
-dangerous   > 100,000 tokens
+Do not fall back to broad manual file reads.
+Rerun the context generator for the current task.
+Verify the new task/hash matches.
+Only then inspect exact source files.
 ```
 
-These thresholds may be configurable.
-
-### Token Counting
-
-Prefer `tiktoken` when available.
-
-If `tiktoken` is missing:
-
-- tell the user if accurate token estimation is required
-- optionally fall back to a rough estimate such as `len(text) / 4`
-- mark fallback estimates clearly
-
-Do not crash without explanation.
-
-### Candidate File Scoring
-
-The context generator should prioritize:
-
-1. Changed files
-2. Exact task matches in path
-3. Exact route include paths
-4. Exact symbol/class/function matches
-5. Exact content matches
-6. Dependency/import neighbors
-7. Same-folder files
-8. build/config/migration files
-9. docs that explain the system
-
-It should penalize:
-
-- runtime folders
-- generated outputs
-- binary files
-- dependency caches
-- logs
-- huge files unless directly relevant
-
-### Manifest Requirements
-
-The manifest should include:
-
-- task
-- selected routes
-- candidate files
-- token estimates
-- risk level
-- included files
-- skipped files/reasons
-- recommended command
-- recommendation reason
-- exact read order
-- baseline snapshot path
-
-### Map Requirements
-
-The map should be useful without reading every source file.
-
-It should include:
-
-- project summary
-- selected routes
-- top files
-- symbol summaries when possible
-- relevant systems
-- warnings/pitfalls
-- recommended next action
-
----
-
-## 10. Required Token Efficiency Reporter
+## 11. Required Token Efficiency Reporter
 
 Create:
 
@@ -563,73 +319,20 @@ Create:
 --ai-token-saver/pyscripts/report_token_efficiency.py
 ```
 
-It must support at least:
-
-```bash
-python --ai-token-saver/pyscripts/report_token_efficiency.py --task "<task>"
-python --ai-token-saver/pyscripts/report_token_efficiency.py --task "<task>" --used-file path/to/file
-python --ai-token-saver/pyscripts/report_token_efficiency.py --task "<task>" --include-context
-python --ai-token-saver/pyscripts/report_token_efficiency.py --task "<task>" --write-report
-```
-
-### Reporter Responsibilities
-
-The reporter must:
+It must:
 
 1. Prefer `--ai-token-saver/sessions/latest_baseline.json`.
-2. Fall back to context manifest only if no baseline exists.
+2. Fall back to current manifest only if no baseline exists.
 3. Count generated context files used.
-4. Count explicit inspected files passed via `--used-file`.
+4. Count explicit inspected files passed by `--used-file`.
 5. Include broad context only when `--include-context` is passed.
-6. Estimate actual optimized token usage.
-7. Estimate saved tokens.
-8. Estimate improvement percentage.
-9. Write report JSON and Markdown under `--ai-token-saver/reports/`.
-10. Clearly state estimates are not billing data.
+6. Estimate saved tokens and improvement percentage.
+7. Write JSON and Markdown reports under `--ai-token-saver/reports/`.
+8. Clearly state estimates are not billing data.
 
-### Negative Savings Case
+It must defend against using a post-edit changed-files manifest as the original baseline.
 
-If optimized tokens exceed baseline, do not hide it.
-
-Report it clearly and explain likely causes:
-
-- baseline was too narrow
-- user inspected many source files
-- broad context was not the true alternative
-- baseline was overwritten or missing
-- task required many edits
-
-This exact failure mode must be defended against:
-
-```text
-post-edit changed-files context accidentally used as original baseline
-```
-
-### Report Fields
-
-The report should include:
-
-- task
-- baseline source
-- baseline tokens
-- optimized tokens
-- estimated saved tokens
-- improvement percentage
-- used original baseline
-- included context files
-- inspected files
-- notes
-- created timestamp
-
-It must follow:
-
-```text
---ai-token-saver-setup/schemas/token_report.schema.json
-```
-
----
-
-## 11. Required Memory Updater
+## 12. Required Memory Updater
 
 Create:
 
@@ -637,33 +340,20 @@ Create:
 --ai-token-saver/pyscripts/update_project_memory.py
 ```
 
-It should help agents update:
-
-```text
---ai-token-saver/known_patterns.md
---ai-token-saver/known_pitfalls.md
---ai-token-saver/context_routes.json
---ai-token-saver/project_brain.md
-```
-
-The script should support adding notes like:
+It should support:
 
 ```bash
 python --ai-token-saver/pyscripts/update_project_memory.py --pitfall "Skript-facing Java APIs must guard null values."
 python --ai-token-saver/pyscripts/update_project_memory.py --pattern "Profile persistence uses model -> DAO -> migration -> API bridge -> Skript wrapper."
 ```
 
-It must avoid destructive overwrites.
-
-If it cannot safely update JSON routes, it should write a pending suggestion file under:
+If JSON route updates are unsafe, write suggestions under:
 
 ```text
 --ai-token-saver/reports/memory_update_suggestions.md
 ```
 
----
-
-## 12. Required Route Inspector
+## 13. Required Route Inspector
 
 Create:
 
@@ -671,26 +361,14 @@ Create:
 --ai-token-saver/pyscripts/inspect_ai_routes.py
 ```
 
-It should help humans/agents inspect available routes:
+It should support:
 
 ```bash
 python --ai-token-saver/pyscripts/inspect_ai_routes.py
-python --ai-token-saver/pyscripts/inspect_ai_routes.py --match "generator database"
+python --ai-token-saver/pyscripts/inspect_ai_routes.py --match "claim database"
 ```
 
-It should print:
-
-- route name
-- description
-- match terms
-- task terms
-- include paths
-- validation commands
-- pitfalls
-
----
-
-## 13. Generated Agent Instructions
+## 14. Required Generated Agent Instructions
 
 Create:
 
@@ -698,116 +376,99 @@ Create:
 --ai-token-saver/generated_agent_instructions.md
 ```
 
-This is one of the most important files.
+It must be repository-specific and include:
 
-It must be directly usable as permanent context/instructions for future AI coding agents.
+- automatically use the workflow for repository tasks
+- do not wait for the user to request the context system
+- convert casual prompts into technical task strings
+- treat "like X" as an existing project pattern
+- run preflight before broad reading
+- verify context task/hash is not stale
+- follow route recommendations
+- preserve original baseline
+- avoid runtime/generated folders
+- inspect exact source files only when needed
+- make smallest complete edits
+- prefer foundation passes for broad migrations
+- validate after edits
+- report full relative file paths
+- run token efficiency reporting
+- update memory after reusable lessons
+- use narrow workflow even for compiler/log errors that identify exact files
 
-It must be repository-specific.
+## 15. Upgrade Lifecycle
 
-It must include:
+The setup repo may be updated with:
 
-1. Automatically use the AI Token Saver workflow for repository tasks.
-2. Do not wait for the user to mention the context system.
-3. Convert casual user prompts into technical task strings.
-4. Treat "like X" as a pattern to inspect and reuse.
-5. Run preflight before broad reading.
-6. Read generated map/manifest before source files.
-7. Follow route recommendations.
-8. Preserve original preflight baseline.
-9. Avoid runtime/generated folders.
-10. Inspect exact source files only when needed.
-11. Make smallest complete edits.
-12. Prefer foundation passes for broad migrations.
-13. Validate after edits.
-14. Report full relative file paths.
-15. Run token efficiency reporting at the end.
-16. Update memory when reusable lessons are learned.
-17. If compiler/log output identifies an exact file, still use the workflow unless the task is purely explanatory and no edit is needed.
-18. For tiny obvious compiler fixes, use a focused task and narrow changed/plugin scope.
-
-Use the template:
-
-```text
---ai-token-saver-setup/templates/generated_agent_instructions.template.md
+```bash
+git -C --ai-token-saver-setup pull
 ```
 
-as a starting point, but make the final file much more specific to the repository.
-
----
-
-## 14. Editing Rules
-
-Create:
+The generated runtime must include:
 
 ```text
---ai-token-saver/editing_rules.md
+--ai-token-saver/runtime_version.json
 ```
 
-It must include general rules and repository-specific rules.
+with:
 
-General rules:
+```json
+{
+  "setup_version": "0.2.0",
+  "runtime_schema_version": "1",
+  "initialized_at": "...",
+  "last_upgraded_at": "..."
+}
+```
 
-- Identify relevant files before editing.
-- Make the smallest complete change.
-- Prefer targeted edits over full-file rewrites.
-- Do not rewrite unrelated files.
-- Do not create placeholder files unless requested.
-- Preserve existing APIs unless the task requires changing them.
-- Do not manually edit generated context files except through generated tooling.
-- Explain when a new dependency becomes relevant mid-task.
-- Validate after editing.
-- Report full relative paths.
+Future agents and scripts should use:
 
-Repository-specific rules should be inferred.
+```bash
+python --ai-token-saver-setup/scripts/check_setup_version.py
+python --ai-token-saver-setup/scripts/upgrade_runtime.py
+```
 
-Examples:
+Upgrade rules:
 
-- If adding a DB field, update model, DAO, migrations, API, tests.
-- If changing a Skript Java bridge, update Java API and Skript calls.
-- If changing a CLI flag, update help text and docs.
-- If changing a spreadsheet generator, preserve formatting unless asked otherwise.
+- never blindly overwrite project memory
+- preserve `project_brain.md`
+- preserve `context_routes.json`
+- preserve `known_patterns.md`
+- preserve `known_pitfalls.md`
+- preserve `editing_rules.md`
+- back up before changing generated instructions/scripts/metadata
+- report whether full reinitialization is recommended
+- only recommend full reinitialization if expected improvement is meaningful
 
----
+## 16. Runtime / Generated Folder Avoidance
 
-## 15. Validation Rules
-
-Discover validation commands.
-
-Examples:
+Avoid broad reads of:
 
 ```text
-Gradle:
-./gradlew build
-
-Maven:
-mvn test
-
-Python:
-python -m pytest
-
-Node:
-npm test
-npm run build
-
-Rust:
-cargo test
+.git/
+.idea/
+.vscode/
+.gradle/
+.mvn/
+.venv/
+venv/
+env/
+node_modules/
+build/
+target/
+dist/
+out/
+logs/
+caches/
+generated reports/
+server worlds/
+binary dependencies/
+--ai-token-saver/context/context.md unless needed
 ```
 
-Write known commands to:
+## 17. Full Relative Path Rule
 
-```text
---ai-token-saver/project_brain.md
---ai-token-saver/editing_rules.md
---ai-token-saver/generated_agent_instructions.md
-```
-
-If no validation command is known, say so explicitly and record the gap.
-
----
-
-## 16. Full Relative Path Rule
-
-Future agents must always report full relative paths.
+Always report full relative paths.
 
 Bad:
 
@@ -823,180 +484,27 @@ BanknoteLib/src/main/java/me/k9lil/banknotelib/database/model/Profile.java
 BanknoteLib/src/main/java/me/k9lil/banknotelib/SkDatabaseAPI.java
 ```
 
-This rule applies to:
-
-- changed files
-- relevant files
-- inspected files
-- errors
-- reports
-
----
-
-## 17. Runtime / Generated Folder Avoidance
-
-The generated system must avoid broad reading of:
-
-- `.git/`
-- `.idea/`
-- `.vscode/`
-- `.gradle/`
-- `.mvn/`
-- `.venv/`
-- `venv/`
-- `env/`
-- `node_modules/`
-- `build/`
-- `target/`
-- `dist/`
-- `out/`
-- logs
-- caches
-- generated reports
-- server worlds
-- binary dependencies
-- `.codex/context.md` unless needed
-- `--ai-token-saver/context/context.md` unless needed
-
-The initialization may inspect enough metadata to know these folders exist, but future context generation should not pack them.
-
----
-
-## 18. Lessons From Prototype To Preserve
-
-The generated system should defend against the exact lessons learned during prototype development:
-
-### Lesson: Hardcoded Generic Routing Is Weak
-
-Better:
-- create project-specific route JSON from actual repository systems
-- use "like X" pattern interpretation
-- update routes when mistakes reveal gaps
-
-### Lesson: Preflight Baseline Must Be Preserved
-
-Bad:
-- report token efficiency against a post-edit changed-files manifest
-
-Good:
-- snapshot original preflight baseline
-- reporter prefers session baseline
-
-### Lesson: Broad Context May Be Unsafe
-
-If context is expensive/dangerous:
-- stop broad reading
-- report risk
-- recommend narrower command/route
-- do not use force unless user approves
-
-### Lesson: Compiler Errors Can Be Exact But Still Need Workflow
-
-If compiler output identifies an exact file:
-- convert error into focused task
-- use narrow route/profile
-- edit exact file
-- validate
-- report token efficiency
-
-### Lesson: Script-Facing APIs Need Defensive Boundaries
-
-If a dynamic scripting layer can call Java/Python/host APIs:
-- validate null/none/blank inputs
-- avoid throwing low-level exceptions for expected missing values
-- preserve compatibility
-
-### Lesson: Generated Runtime Must Have Permanent Instructions
-
-The setup is incomplete unless it outputs future-agent instructions that users can copy into future coding agents.
-
-### Lesson: Human Prompts Stay Human
-
-Do not require the user to say:
-- run preflight
-- use context system
-- inspect DAO
-- make a foundation pass
-- report token efficiency
-
-The generated agent instructions must enforce that automatically.
-
----
-
-## 19. README For Generated Runtime
-
-Create:
-
-```text
---ai-token-saver/README.md
-```
-
-It must explain:
-
-- what the folder is
-- how to run preflight
-- how to generate context
-- how to report token efficiency
-- how to inspect routes
-- how to update memory
-- how future agents should use generated instructions
-
----
-
-## 20. Generated Tools Manifest
-
-Create:
-
-```text
---ai-token-saver/generated_tools_manifest.json
-```
-
-It must follow:
-
-```text
---ai-token-saver-setup/schemas/generated_tools_manifest.schema.json
-```
-
-It should list each generated script:
-
-- name
-- path
-- purpose
-- commands
-- inputs
-- outputs
-- dependencies
-- notes
-
----
-
-## 21. Final Initialization Report
+## 18. Final Initialization Report
 
 After creating files, report:
 
-1. Generated runtime folder path.
+1. Runtime folder path.
 2. Generated files.
 3. Generated scripts.
-4. Major discovered systems.
-5. Generated routes.
-6. Avoided runtime/generated folders.
+4. Major systems discovered.
+5. Routes generated.
+6. Avoided folders.
 7. Validation commands.
-8. Path to generated agent instructions.
-9. How the user should prompt future agents.
-10. Any limitations or dependencies.
+8. Generated agent instructions path.
+9. How future users should prompt agents.
+10. Limitations or dependencies.
 
-Do not claim success unless the files exist.
+Do not claim completion unless files exist.
 
----
+## 19. Intended User Command
 
-## 22. Intended User Command
-
-The intended command from the user is:
+This should be enough:
 
 ```text
 Look through --ai-token-saver-setup and set it up for this repository.
 ```
-
-That should be enough.
-
-The user should not need to provide any additional bootstrap explanation.

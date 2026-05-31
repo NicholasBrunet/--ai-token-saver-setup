@@ -20,12 +20,10 @@
       "type": "string"
     },
     "baseline_tokens": {
-      "type": "integer",
-      "minimum": 0
+      "type": "integer"
     },
     "optimized_tokens": {
-      "type": "integer",
-      "minimum": 0
+      "type": "integer"
     },
     "estimated_saved_tokens": {
       "type": "integer"
@@ -58,5 +56,5 @@
       }
     }
   },
-  "additionalProperties": false
+  "additionalProperties": true
 }

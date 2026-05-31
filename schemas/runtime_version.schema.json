@@ -1,25 +1,28 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "AI Token Saver Context Routes",
+  "title": "AI Token Saver Runtime Version",
   "type": "object",
   "required": [
-    "version",
-    "routes"
+    "setup_version",
+    "runtime_schema_version"
   ],
   "properties": {
-    "version": {
+    "setup_version": {
       "type": "string"
     },
-    "generated_at": {
+    "runtime_schema_version": {
       "type": "string"
     },
-    "repository_name": {
+    "initialized_at": {
       "type": "string"
     },
-    "routes": {
+    "last_upgraded_at": {
+      "type": "string"
+    },
+    "upgrade_notes": {
       "type": "array",
       "items": {
-        "type": "object"
+        "type": "string"
       }
     }
   },

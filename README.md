@@ -2,7 +2,7 @@
 
 A reusable bootstrap repository for creating project-specific AI context and token-optimization tooling.
 
-This repository is meant to be cloned directly into another repository as a nested local repo:
+Install into a project as a nested local repo:
 
 ```bash
 git clone https://github.com/NicholasBrunet/--ai-token-saver-setup.git ./--ai-token-saver-setup
@@ -32,6 +32,9 @@ your-project/
   --ai-token-saver-setup/      # nested setup repo, ignored by parent
     .git/
     README.md
+    VERSION
+    CHANGELOG.md
+    UPGRADE.md
     AI_REPO_CONTEXT_BOOTSTRAP.md
     initialization_cost.py
     schemas/
@@ -54,23 +57,19 @@ The parent project should usually ignore both folders:
 
 Install helper:
 
+```bash
+./--ai-token-saver-setup/scripts/install-parent-ignore.sh
+```
+
 PowerShell:
 
 ```powershell
 .\--ai-token-saver-setup\scripts\install-parent-ignore.ps1
 ```
 
-Linux/macOS/Git Bash:
-
-```bash
-./--ai-token-saver-setup/scripts/install-parent-ignore.sh
-```
-
 ## Estimate Initialization Cost
 
-Before asking the AI agent to perform the one-time setup, you can estimate the likely token cost.
-
-From the parent project root:
+Before asking the AI agent to perform the one-time setup:
 
 ```bash
 python --ai-token-saver-setup/initialization_cost.py
@@ -82,22 +81,10 @@ PowerShell:
 python .\--ai-token-saver-setup\initialization_cost.py
 ```
 
-From inside `--ai-token-saver-setup/`:
-
-```bash
-python initialization_cost.py
-```
-
 Write a report:
 
 ```bash
 python --ai-token-saver-setup/initialization_cost.py --write-report
-```
-
-PowerShell:
-
-```powershell
-python .\--ai-token-saver-setup\initialization_cost.py --write-report
 ```
 
 This writes:
@@ -107,18 +94,6 @@ This writes:
 --ai-token-saver-setup/reports/initialization_cost.md
 ```
 
-The script estimates:
-
-```text
-parent project readable source cost
-+
---ai-token-saver-setup readable setup cost
-=
-estimated one-time initialization cost
-```
-
-It excludes common runtime, generated, dependency, binary, and cache folders by default. The estimate is useful for planning, but it is not exact billing data.
-
 ## What The AI Must Generate
 
 At minimum:
@@ -126,6 +101,7 @@ At minimum:
 ```text
 --ai-token-saver/
   README.md
+  runtime_version.json
   project_brain.md
   project_systems.json
   context_routes.json
@@ -137,6 +113,7 @@ At minimum:
   sessions/
   reports/
   context/
+  backups/
   pyscripts/
     generate_ai_context.py
     report_token_efficiency.py
@@ -144,7 +121,33 @@ At minimum:
     inspect_ai_routes.py
 ```
 
-The exact implementation can be adapted to the repository, but the generated behavior must satisfy the bootstrap specification.
+## Updating This Setup Repo
+
+Because this folder is a nested git repo, update it with:
+
+```bash
+git -C --ai-token-saver-setup pull
+```
+
+PowerShell:
+
+```powershell
+git -C .\--ai-token-saver-setup pull
+```
+
+Then check the generated runtime:
+
+```bash
+python --ai-token-saver-setup/scripts/check_setup_version.py
+```
+
+Apply safe runtime upgrades:
+
+```bash
+python --ai-token-saver-setup/scripts/upgrade_runtime.py
+```
+
+The upgrade script preserves project-specific memory files by default.
 
 ## Why This Exists
 
@@ -156,6 +159,7 @@ This setup asks the AI to spend more once, then generate project-specific contex
 casual user prompt
 → project-aware task conversion
 → preflight context estimate
+→ stale context check
 → focused route-based context
 → targeted exact file reads
 → small complete edit
@@ -171,9 +175,3 @@ Use this exact prompt after cloning:
 ```text
 Look through --ai-token-saver-setup and set it up for this repository.
 ```
-
-## Important
-
-This setup folder is generic and reusable.
-
-The generated `--ai-token-saver/` folder is project-specific and should be regenerated or updated per repository.

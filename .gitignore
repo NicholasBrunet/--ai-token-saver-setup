@@ -4,5 +4,7 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Generated archives
+# Generated archives/reports
 *.zip
+reports/
+__pycache__/
